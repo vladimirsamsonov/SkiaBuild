@@ -30,7 +30,7 @@ jobs:
         if: ${{ matrix.target_machine == 'arm64' }}
       - run: PATH=/usr/lib/binutils-2.26/bin:$PATH python3 script/checkout.py --version ${{ env.version }}
       - run: PATH=/usr/lib/binutils-2.26/bin:$PATH python3 script/build.py --build-type ${{ matrix.build_type }} --machine ${{ matrix.target_machine }} --use-clang ${{ inputs.use_clang }}
-      - run: PATH=/usr/lib/binutils-2.26/bin:$PATH python3 script/archive.py --version ${{ env.version }} --build-type ${{ matrix.build_type }} --machine ${{ matrix.target_machine }} --classifier ${{ inputs.use_clang && 'clang' || '' }}
+      - run: PATH=/usr/lib/binutils-2.26/bin:$PATH python3 script/archive.py --version ${{ env.version }} --build-type ${{ matrix.build_type }} --machine ${{ matrix.target_machine }} --classifier "${{ inputs.use_clang && 'clang' || '' }}"
       - uses: actions/upload-artifact@v4
         with:
           name: Skia-${{ env.version }}-linux-${{ matrix.build_type }}-${{ matrix.target_machine }}${{ inputs.use_clang && '-clang' || '' }}.zip
@@ -60,7 +60,7 @@ jobs:
       - shell: bash
         run: python3 script/build.py --build-type ${{ matrix.build_type }} --use-clang ${{ inputs.use_clang }}
       - shell: bash
-        run: python3 script/archive.py --version ${{ env.version }} --build-type ${{ matrix.build_type }} --classifier ${{ inputs.use_clang && 'clang' || '' }}
+        run: python3 script/archive.py --version ${{ env.version }} --build-type ${{ matrix.build_type }} --classifier "${{ inputs.use_clang && 'clang' || '' }}"
       - uses: actions/upload-artifact@v7
         with:
           name: Skia-${{ env.version }}-windows-${{ matrix.build_type }}-${{ env.os_arch }}${{ inputs.use_clang && '-clang' || '' }}.zip
