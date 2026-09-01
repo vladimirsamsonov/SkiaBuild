@@ -59,6 +59,11 @@ def main():
         'cxx="aarch64-linux-gnu-g++-10"',
         'extra_cflags=["-I/usr/aarch64-linux-gnu/include"]'
       ]
+    elif common.use_clang():
+      args += [
+        'cc="clang"',
+        'cxx="clang++"',
+      ]
     else:
       args += [
         'cc="gcc-10"',
@@ -73,6 +78,14 @@ def main():
       'extra_cflags=["-DSK_FONT_HOST_USE_SYSTEM_SETTINGS"]',
       'skia_use_vulkan=true',
     ]
+
+    if common.use_clang():
+      if machine == 'x64':
+        # cc/cxx are ignored on Windows; clang-cl is selected via clang_win.
+        # LLVM ships preinstalled at this path on GitHub-hosted Windows runners.
+        args += ['clang_win="C:/Program Files/LLVM"']
+      else:
+        print('> use-clang requested but not yet supported for windows/' + machine + ', falling back to MSVC')
   elif 'android' == system:  
     args += [  
         'skia_use_system_freetype2=false',  

@@ -12,6 +12,7 @@ def create_parser(version_required=False):
   parser.add_argument('--system')
   parser.add_argument('--machine')
   parser.add_argument('--ndk')
+  parser.add_argument('--use-clang', default='false')
   return parser
 
 def system():
@@ -66,3 +67,8 @@ def ndk():
   parser = create_parser()
   (args, _) = parser.parse_known_args()
   return args.ndk if args.ndk else ''
+
+def use_clang():
+  parser = create_parser()
+  (args, _) = parser.parse_known_args()
+  return args.use_clang.lower() == 'true'
